@@ -1,3 +1,4 @@
+import { calculatePercentage } from 'src/app/shared/helpers/model.helpers';
 import { Task } from './task.model';
 
 /**
@@ -10,6 +11,9 @@ export type TObjetiveStates =
   | 'Empezado'
   | 'Pausado';
 
+/**
+ * ? Interface del objeto a recibir en el constructor
+ */
 export interface IObjetiveConstructor {
   id: string;
   name: string;
@@ -36,6 +40,10 @@ export class Objetive {
   private _percentage: number;
   get percentage(): number {
     return this._percentage;
+  }
+
+  get isDone(): boolean {
+    return this._percentage >= 100;
   }
 
   private _tasks: Task[];
@@ -68,28 +76,12 @@ export class Objetive {
   // ANCHOR - Métodos
 
   /**
-   * ? Recupera el progreso/porcentaje del objetivo
-   */
-  private calculatePercentage(): void {
-    let count = 0;
-    let countDone = 0;
-    for (const task of this.tasks) {
-      count++;
-      task.isDone && countDone++;
-    }
-
-    this._percentage = Math.round(
-      (100 * ((100 * countDone) / count + Number.EPSILON)) / 100
-    );
-  }
-
-  /**
    * ? Añade una tarea al objetivo y recalcula el porcentaje
    * @param task {Task} Tarea a añadir en el Objetivo
    */
   public addTask(task: Task): void {
     this._tasks.push(task);
-    this.calculatePercentage();
+    this._percentage = calculatePercentage(this._tasks);
   }
 
   /**
@@ -100,6 +92,6 @@ export class Objetive {
     //* Si recibimos la tarea completa extraemos la id
     if (typeof task !== 'string') task = (task as Task).id;
     this._tasks = this._tasks.filter((element) => element.id !== task);
-    this.calculatePercentage();
+    this._percentage = calculatePercentage(this._tasks);
   }
 }

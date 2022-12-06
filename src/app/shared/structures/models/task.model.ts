@@ -25,12 +25,12 @@ export interface ITaskConstructor {
  */
 export class Task {
   // ANCHOR - Variables
-  name: string;
-  description: string | undefined;
-  priority: TTaskPriority;
-  type: TTaskType;
-  objetiveId: string;
-  isDone: boolean;
+  public name: string;
+  public description: string | undefined;
+  public priority: TTaskPriority;
+  public type: TTaskType;
+  public objetiveId: string;
+  public isDone: boolean;
 
   private _id: string;
   get id(): string {
