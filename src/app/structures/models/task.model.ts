@@ -1,4 +1,4 @@
-import { Objetive } from "./objetive.model";
+import { Objetive } from './objetive.model';
 
 /**
  * ? Tipo de prioridades de las posibles tareas
@@ -15,27 +15,29 @@ export type TTaskType = 'Bug' | 'Implementar' | 'Fix' | 'Revisar' | 'Idea';
  */
 export class Task {
   // ANCHOR - Variables
-  // id: string;
+  id: string;
   name: string;
   description: string;
   priority: TTaskPriority;
   type: TTaskType;
-  objetive: string;
+  objetiveId: string;
   isDone: boolean;
 
   // ANCHOR - Constructor
   constructor(
+    id: string,
     name: string,
     description: string,
     priority: TTaskPriority,
     type: TTaskType,
-    objetive: string
+    objetiveId: string
   ) {
+    this.id = id;
     this.name = name;
     this.description = description;
     this.priority = priority;
     this.type = type;
-    this.objetive = objetive;
+    this.objetiveId = objetiveId;
     this.isDone = false;
   }
 
@@ -45,7 +47,7 @@ export class Task {
   /**
    * ? Método para recuperar el objetivo de la tarea
    */
-  public getObjetive() : Objetive {
-    return new Objetive();
-  }
+  // public getObjetive(): Objetive {
+  //   return new Objetive();
+  // }
 }
