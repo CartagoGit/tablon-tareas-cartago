@@ -10,12 +10,21 @@ export type TObjetiveStates =
   | 'Empezado'
   | 'Pausado';
 
+export interface IObjetiveConstructor {
+  id: string;
+  name: string;
+  description: string;
+  state: TObjetiveStates;
+  sectionId: string;
+}
+
 /**
  * ? Modelo de objetivos a realizar
  */
 export class Objetive {
   // ANCHOR - Variables
   name: string;
+  description: string | undefined;
   state: TObjetiveStates;
   sectionId: string;
 
@@ -31,20 +40,27 @@ export class Objetive {
 
   private _tasks: Task[];
   get tasks(): Task[] {
-    return this._tasks;
+    return [...this._tasks];
   }
 
   // ANCHOR - Constructor
-  constructor(
-    id: string,
-    name: string,
-    state: TObjetiveStates,
-    sectionId: string
-  ) {
-    this._id = id;
+  constructor(objetiveConstructor: IObjetiveConstructor) {
+    const {
+      id,
+      name,
+      description = undefined,
+      state,
+      sectionId,
+    } = objetiveConstructor;
+
+    //* public
     this.name = name;
+    this.description = description || undefined;
     this.state = state;
     this.sectionId = sectionId;
+
+    //* privates
+    this._id = id;
     this._percentage = 0;
     this._tasks = [];
   }
@@ -53,9 +69,8 @@ export class Objetive {
 
   /**
    * ? Recupera el progreso/porcentaje del objetivo
-   * @return {number} Porcentaje
    */
-  private calculatePercentage(): number {
+  private calculatePercentage(): void {
     let count = 0;
     let countDone = 0;
     for (const task of this.tasks) {
@@ -63,8 +78,9 @@ export class Objetive {
       task.isDone && countDone++;
     }
 
-    this._percentage = (100 * countDone) / count;
-    return this._percentage;
+    this._percentage = Math.round(
+      (100 * ((100 * countDone) / count + Number.EPSILON)) / 100
+    );
   }
 
   /**
@@ -81,10 +97,9 @@ export class Objetive {
    * @param task {Task | string} Tarea o Id de la tarea a eliminar
    */
   public removeTask(task: Task | string): void {
-    let id: string;
+    //* Si recibimos la tarea completa extraemos la id
     if (typeof task !== 'string') task = (task as Task).id;
-    id = task;
-    this._tasks = this._tasks.filter((element) => element.id !== id);
+    this._tasks = this._tasks.filter((element) => element.id !== task);
     this.calculatePercentage();
   }
 }
