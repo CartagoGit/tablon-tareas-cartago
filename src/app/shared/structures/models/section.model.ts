@@ -1,5 +1,6 @@
 import { calculatePercentage } from 'src/app/shared/helpers/model.helpers';
 import { Objetive } from './objetive.model';
+import { Tech } from './techs.model';
 
 /**
  * ? Interface del objeto a recibir en el constructor
@@ -78,5 +79,20 @@ export class Section {
     );
     this._percentage = calculatePercentage(this._objetives);
     return this._objetives;
+  }
+
+  /**
+   * ? Recupera las tecnologias utilizadas en los objetivos de la sección
+   * @returns {Tech[]} - Técnologias usadas en los objetivos de la sección
+   */
+  public getTechs(): Tech[] {
+    let techsInSection: Tech[] = [];
+    this._objetives.forEach((objetive) => {
+      objetive.techs.forEach((tech) => {
+        if (!techsInSection.some((elem) => elem.id === tech.id))
+          techsInSection.push(tech);
+      });
+    });
+    return techsInSection;
   }
 }

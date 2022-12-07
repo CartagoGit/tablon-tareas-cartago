@@ -18,18 +18,13 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/tablon-tareas-cartago",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "index": "src/static/index.html",
+            "main": "src/static/main.ts",
+            "polyfills": "src/static/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/static/favicon.ico", "src/assets"],
+            "styles": ["src/assets/styles/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -86,18 +81,13 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "main": "src/static/test.ts",
+            "polyfills": "src/static/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/static/favicon.ico", "src/assets"],
+            "styles": ["src/assets/styles/styles.scss"],
             "scripts": []
           }
         }

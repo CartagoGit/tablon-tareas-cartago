@@ -68,7 +68,7 @@ export class Objetive {
       description = undefined,
       state,
       sectionId,
-      techs,
+      techs = [],
     } = objetiveConstructor;
 
     //* public
@@ -127,7 +127,7 @@ export class Objetive {
    */
   public removeTech(tech: Tech | string): Tech[] {
     if (typeof tech !== 'string') tech = (tech as Tech).id;
-    this._techs = this.techs.filter(element => element.id !== tech)
+    this._techs = this.techs.filter((element) => element.id !== tech);
     return this._techs;
   }
 }
