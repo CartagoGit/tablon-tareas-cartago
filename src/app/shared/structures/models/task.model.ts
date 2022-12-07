@@ -39,7 +39,7 @@ export class Task {
 
   // ANCHOR - Constructor
 
-  constructor(taskConstructor: ITaskConstructor) {
+  private constructor(taskConstructor: ITaskConstructor) {
     const {
       id,
       name,
@@ -66,6 +66,13 @@ export class Task {
   // TODO - Implementar metodo para recuperar el objeto del objetivo completo.
   /**
    * ? Método para recuperar el objetivo de la tarea
+   */
+  // public getObjetive(): Objetive {
+  //   return new Objetive();
+  // }
+
+  /**
+   * ? Método para recuperar las ección de la tarea
    */
   // public getObjetive(): Objetive {
   //   return new Objetive();

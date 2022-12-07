@@ -41,7 +41,7 @@ export class Section {
   }
 
   // ANCHOR - Constructor
-  constructor(sectionContrutor: ISectionsConstructor) {
+  private constructor(sectionContrutor: ISectionsConstructor) {
     const { id, name, description, icon = undefined } = sectionContrutor;
     this._id = id;
     this.name = name;
@@ -57,22 +57,26 @@ export class Section {
   /**
    * ? Añade un objetivo a la sección y recalcula el porcentaje
    * @param objetive {Objetive} Objetivo a añadir en la sección
+   * @returns {Objetive[]} - Retorna la lista de objetivos final
    */
-  public addObjetive(objetive: Objetive): void {
+  public addObjetive(objetive: Objetive): Objetive[] {
     this._objetives.push(objetive);
     this._percentage = calculatePercentage(this._objetives);
+    return this._objetives;
   }
 
   /**
    * ? Elimina un objetivo a la sección y recalcula el porcentaje
    * @param objetive {Objetive | string} Objetivo o Id del objetivo a eliminar
+   * @returns {Objetive[]} - Retorna la lista de objetivos final
    */
-  public removeObjetive(objetive: Objetive | string): void {
+  public removeObjetive(objetive: Objetive | string): Objetive[] {
     //* Si recibimos la tarea completa extraemos la id
     if (typeof objetive !== 'string') objetive = (objetive as Objetive).id;
     this._objetives = this._objetives.filter(
       (element) => element.id !== objetive
     );
     this._percentage = calculatePercentage(this._objetives);
+    return this._objetives;
   }
 }
