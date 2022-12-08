@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, Type } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
@@ -6,21 +6,29 @@ import { BehaviorSubject, Observable } from 'rxjs';
  */
 export type TModalState = 'open' | 'close';
 
-export type TModalContent = Component | string | undefined;
-
 /**
  * REVIEW Implementar opciones
  * ? Opciones del modal a abrir
  */
-export interface IModalOptions {}
+//TODO
+export interface IModalOptions {
+  buttons?: {
+    ok: boolean;
+    cancel: boolean;
+    close: boolean;
+    modify: boolean;
+  };
+}
 
 /**
- * ? Datos necesarios para precargar el modal
+ * ? Datos necesarios del modal
  */
 export interface IModalData {
-  content?: TModalContent;
-  options?: IModalOptions | undefined;
-  state: TModalState;
+  component?: Type<any>;
+  text?: string;
+  options?: IModalOptions;
+  state?: TModalState;
+  data?: any;
 }
 
 @Injectable({
@@ -30,21 +38,22 @@ export class ModalService {
   // ANCHOR - Variables
 
   /**
+   * ? Inializador del contenido y de las opciones
+   */
+  private _modalData: IModalData = {
+    component: undefined,
+    text: undefined,
+    options: undefined,
+    data: undefined,
+    state: 'close',
+  };
+
+  /**
    * ? Subject a observar de todos los datos del modal
    * + Se inicializa cerrado
    */
   private _display: BehaviorSubject<IModalData> =
-    new BehaviorSubject<IModalData>({
-      content: undefined,
-      options: undefined,
-      state: 'close',
-    });
-
-  /**
-   * ? Inializador del contenido y de las opciones
-   */
-  private _content: TModalContent = undefined;
-  private _options: IModalOptions | undefined = undefined;
+    new BehaviorSubject<IModalData>(this._modalData);
 
   // ANCHOR - Constructor
   constructor() {}
@@ -59,35 +68,23 @@ export class ModalService {
   }
 
   /**
-   * ? Abre el modal
-   * + 4 Sobrecargas
-   * ----
-   * @option1 () => void;
-   * @option2 (options : IModalOptions) => void;
-   * @option3 (content: string | Component) => void;
-   * @option4 (content: string | Component, options: IModalOptions) => void
+   * ? Abre el modal y recibe los datos para configurar la ventana
+   * @params {IModalData} - Datos a recibir al abrir el modal
    */
-  public open(): void;
-  public open(options: IModalOptions): void;
-  public open(content: TModalContent): void;
-  public open(content: TModalContent, options: IModalOptions): void;
-  public open(
-    content: TModalContent = undefined,
-    options: IModalOptions | undefined = undefined
-  ): void {
-    this._content = content;
-    this._options = options;
-    this._display.next({ content, options, state: 'open' });
+  public open(modalData: IModalData | undefined = undefined): void {
+    console.log(this._modalData);
+    this._modalData = { ...modalData, state: 'open' };
+    this._display.next({ ...this._modalData });
   }
 
   /**
    * ? Cierra el modal
    */
   public close(): void {
-    this._display.next({
-      content: this._content,
-      options: this._options,
+    this._modalData = {
+      ...this._modalData,
       state: 'close',
-    });
+    };
+    this._display.next(this._modalData);
   }
 }

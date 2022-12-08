@@ -22,18 +22,18 @@ export class BoardPageComponent implements OnInit {
 
   //FIXME - Borrar cuando se termine de testear
   public openTask() {
-    this._modalService.open(CreateTaskPageComponent);
+    this._modalService.open({ component: CreateTaskPageComponent });
   }
   public openObjetive() {
-    this._modalService.open(CreateObjetivePageComponent);
+    this._modalService.open({ component: CreateObjetivePageComponent });
   }
   public openSection() {
-    this._modalService.open(CreateSectionPageComponent);
+    this._modalService.open({ component: CreateSectionPageComponent });
   }
   public openTech() {
-    this._modalService.open(CreateTechPageComponent);
+    this._modalService.open({ component: CreateTechPageComponent });
   }
   public openText(text: string) {
-    this._modalService.open(text);
+    this._modalService.open({ text });
   }
 }

@@ -21,7 +21,7 @@ export class ModalComponent implements OnInit {
   public display: IModalData | undefined = undefined;
 
   /**
-   * ? Div donde insertar el componente
+   * ? Div donde insertar el texto plano enviado al modal
    */
   @ViewChild('contentString', { read: ViewContainerRef })
   contentString!: ViewContainerRef;
@@ -36,26 +36,34 @@ export class ModalComponent implements OnInit {
   constructor(private _modalSvc: ModalService) {}
 
   ngOnInit(): void {
+    // ? Subscripción para recuperar los datos recibidos al abrir el modal
     this._modalSvc.watch().subscribe({
       next: (modalData: IModalData) => {
         this.display = modalData;
-        if (!!modalData.content) {
+
+        //* Limpiamos los contenedores
+        if (!!this.contentString)
           (this.contentString.element.nativeElement as HTMLElement).innerHTML =
             '';
-          this.contentComponent.clear();
-          if (typeof modalData.content !== 'string') {
-            this.contentComponent.createComponent(modalData.content as any);
-          } else if (typeof modalData.content === 'string') {
-            (
-              this.contentString.element.nativeElement as HTMLElement
-            ).innerHTML = modalData.content;
-          }
+        if (!!this.contentComponent) this.contentComponent.clear();
+
+        //* Rellenamos el contenido segun los enviado al abrir el modal
+        if (!!modalData.component) {
+          this.contentComponent.createComponent(modalData.component);
+        } else if (!!modalData.text) {
+          (this.contentString.element.nativeElement as HTMLElement).innerHTML =
+            modalData.text;
         }
       },
     });
   }
 
   // ANCHOR - Métodos
+
+  /**
+   * ? Método al hacer click en cualquiera de los tipos de botones del modal
+   * @param typeButton {TModalButtons} - Tipo de botón pulsado
+   */
   public clickType(typeButton: TModalButtons): void {
     const buttonMethods: { [type in TModalButtons]: () => void } = {
       ok: () => {},
@@ -66,6 +74,6 @@ export class ModalComponent implements OnInit {
     };
     console.log(typeButton);
 
-    buttonMethods[typeButton]()
+    buttonMethods[typeButton]();
   }
 }
