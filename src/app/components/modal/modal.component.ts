@@ -1,11 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalService } from 'src/app/shared/services/modal.service';
-import {
-  TModalState,
-  TModalContaint,
-  IModalData,
-} from '../../shared/services/modal.service';
+import { IModalData } from '../../shared/services/modal.service';
 
 @Component({
   selector: 'app-modal',
@@ -14,33 +9,47 @@ import {
 })
 export class ModalComponent implements OnInit {
   // ANCHOR - Variables
+  // /**
+  //  * ? Observable del estado del modal
+  //  */
+  // public display$: Observable<IModalData> = this._modalSvc.watch();
+
   /**
-   * ? Observable del estado del modal
+   * ? Datos recibidos desde el observable del servicio del modal
    */
-  public display$: Observable<IModalData> = this.modalSvc.watch();
-
-  // /**
-  //  * ? Componente a mostrar en el modal
-  //  */
-  // public component: Component | undefined = undefined;
-
-  // /**
-  //  * ? Componente a mostrar en el modal
-  //  */
-  // public toShow$: Observable<TModalContaint>  = this.modalSvc.watchContain()
+  public display: IModalData | undefined = undefined;
 
   /**
    * ? Div donde insertar el componente
    */
-  @ViewChild('content') content: ElementRef<Component> | undefined = undefined;
+  @ViewChild('content', { read: ViewContainerRef }) content!: ViewContainerRef;
 
   // ANCHOR - Constructor
-  constructor(private modalSvc: ModalService) {}
+  constructor(private _modalSvc: ModalService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._modalSvc.watch().subscribe({
+      next: (modalData: IModalData) => {
+        this.display = modalData;
+        if (!!modalData.content) {
+          (this.content.element.nativeElement as HTMLElement).innerHTML = '';
+          this.content.clear();
+          if (typeof modalData.content !== 'string') {
+            this.content.createComponent(modalData.content as any);
+          } else if (typeof modalData.content === 'string') {
+            (this.content.element.nativeElement as HTMLElement).innerHTML =
+              modalData.content;
+          }
+        }
+      },
+    });
+  }
+
+  //FIXME Arreglar ng100
+  ngAfterViewInit(): void {}
 
   // ANCHOR - Métodos
   public close(): void {
-    this.modalSvc.close();
+    this._modalSvc.close();
   }
 }

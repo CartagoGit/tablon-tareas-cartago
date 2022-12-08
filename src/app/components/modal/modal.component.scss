@@ -1,12 +1,14 @@
 section {
-  &.open {
-    visibility: inherit;
-    opacity: 1;
-    backdrop-filter: blur(5px);
-  }
-  &.close {
-    visibility: hidden;
-    opacity: 0;
+  &.modal- {
+    &open {
+      visibility: inherit;
+      opacity: 1;
+      backdrop-filter: blur(5px);
+    }
+    &close {
+      visibility: hidden;
+      opacity: 0;
+    }
   }
   display: block;
   position: absolute;

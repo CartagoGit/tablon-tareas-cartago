@@ -1,6 +1,6 @@
-<ng-container *ngIf="display$ | async as display">
+<ng-container *ngIf="!!display">
   <section
-    [class]="display.state === 'open' ? 'open' : 'close'"
+    [class]="display.state === 'open' ? 'modal-open' : 'modal-close'"
     (click)="close()"
   >
     <div (click)="$event.stopPropagation()">
@@ -8,7 +8,6 @@
 
       <h1>Hello World</h1>
       <div #content>Content</div>
-      <div>{{ display.containt }}</div>
     </div>
   </section>
 </ng-container>
