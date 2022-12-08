@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateTechPageComponent } from './create-models/create-tech-page/create-tech-page.component';
+import { BoardPageComponent } from './board-page/board-page.component';
+
 
 
 const routes: Routes = [
@@ -10,7 +11,7 @@ const routes: Routes = [
       {
         //FIXME - Cambiar cuando se haya terminado de depurar
         path: '',
-        component: CreateTechPageComponent,
+        component: BoardPageComponent,
       },
     ],
   },

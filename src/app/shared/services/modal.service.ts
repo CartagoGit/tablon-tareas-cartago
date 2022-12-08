@@ -1,10 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
  * ? Tipo de posibles estados del modal
  */
 export type TModalState = 'open' | 'close';
+
+export type TModalContaint = Component | string | undefined;
+
+/**
+ * ? Opciones del modal a abrir
+ */
+export interface IModalOptions {}
+
+/**
+ * ? Datos necesarios para precargar el modal
+ */
+export interface IModalData {
+  containt?: TModalContaint;
+  options?: IModalOptions | undefined;
+  state: TModalState;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +29,17 @@ export class ModalService {
   // ANCHOR - Variables
 
   /**
-   * ? Subject a observar para contemplar si el modal esta abierto o cerrado
-   * Se inicializa cerrado
+   * ? Subject a observar de todos los datos del modal
+   * + Se inicializa cerrado
    */
-  private _display: BehaviorSubject<TModalState> =
-    new BehaviorSubject<TModalState>('close');
+  private _display: BehaviorSubject<IModalData> =
+    new BehaviorSubject<IModalData>({ state: 'close' });
+
+  /**
+   * ? Inializador del contenido y de las opciones
+   */
+  private _containt: TModalContaint = undefined;
+  private _options: IModalOptions | undefined = undefined;
 
   // ANCHOR - Constructor
   constructor() {}
@@ -27,21 +49,42 @@ export class ModalService {
    * ? Retorna el observable del estado del modal
    * @return {Observable<BehaviorSubject<TModalState>}
    */
-  public watch(): Observable<TModalState> {
+  public watch(): Observable<IModalData> {
     return this._display.asObservable();
   }
 
   /**
-   * ? Cambia el estado del modal a abierto
+   * ? Abre el modal
+   * + 4 Sobrecargas
+   * ----
+   * @option1 () => void;
+   * @option2 (options : IModalOptions) => void;
+   * @option3 (containt: string | Component) => void;
+   * @option4 (containt: string | Component, options: IModalOptions) => void
    */
-  public open(): void {
-    this._display.next('open');
+  public open(): void;
+  public open(options: IModalOptions): void;
+  public open(containt: TModalContaint): void;
+  public open(containt: TModalContaint, options: IModalOptions): void;
+  public open(
+    containt: TModalContaint = undefined,
+    options: IModalOptions | undefined = undefined
+  ): void {
+    this._containt = containt;
+    this._options = options;
+    this._display.next({ containt, options, state: 'open' });
   }
 
   /**
-   * ? Cambia el estado del modal a cerrado
+   * ? Cierra el modal
    */
   public close(): void {
-    this._display.next('close');
+    this._display.next({
+      containt: this._containt,
+      options: this._options,
+      // containt: undefined,
+      // options: undefined,
+      state: 'close',
+    });
   }
 }
