@@ -1,3 +1,11 @@
-:host{
-  background-color: red;
+:host::ng-deep {
+  width: 100%;
+  height: 100%;
+  border: 3px solid yellow;
+  background: red;
+  color: blue;
+  .hola {
+    background: green;
+    height: 130px;
+  }
 }

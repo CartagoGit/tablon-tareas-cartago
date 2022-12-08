@@ -1,13 +1,61 @@
 <ng-container *ngIf="!!display">
   <section
-    [class]="display.state === 'open' ? 'modal-open' : 'modal-close'"
-    (click)="close()"
+    class="modal__backdrop"
+    [ngClass]="display.state === 'open' ? 'modal--open' : 'modal--close'"
+    (click)="clickType('close')"
   >
-    <div (click)="$event.stopPropagation()">
-      <button class="close" type="button" (click)="close()">X</button>
+    <div (click)="$event.stopPropagation()" class="modal">
+      <div class="modal__header">
+        <div
+          class="modal__button modal__button--close"
+          type="button"
+          (click)="clickType('close')"
+        >
+          X
+        </div>
+      </div>
+      <div class="modal__body">
+        <div #contentString></div>
+        <ng-template #contentComponent></ng-template>
+      </div>
 
-      <h1>Hello World</h1>
-      <div #content>Content</div>
+      <div class="modal__footer">
+        <div
+          type="button"
+          (click)="clickType('save')"
+          class="modal__button modal__button--save"
+        >
+          Guardar
+        </div>
+        <div
+          type="button"
+          (click)="clickType('ok')"
+          class="modal__button modal__button--ok"
+        >
+          Ok
+        </div>
+        <div
+          type="button"
+          (click)="clickType('close')"
+          class="modal__button modal__button--close"
+        >
+          Cerrar
+        </div>
+        <div
+          type="button"
+          (click)="clickType('modify')"
+          class="modal__button modal__button--modify"
+        >
+          Modificar
+        </div>
+        <div
+          type="button"
+          (click)="clickType('cancel')"
+          class="modal__button modal__button--cancel"
+        >
+          Cancelar
+        </div>
+      </div>
     </div>
   </section>
 </ng-container>

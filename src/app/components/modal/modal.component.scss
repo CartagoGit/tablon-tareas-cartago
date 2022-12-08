@@ -1,15 +1,6 @@
-section {
-  &.modal- {
-    &open {
-      visibility: inherit;
-      opacity: 1;
-      backdrop-filter: blur(5px);
-    }
-    &close {
-      visibility: hidden;
-      opacity: 0;
-    }
-  }
+$padding-distance: 16px;
+
+.modal__backdrop {
   display: block;
   position: absolute;
   top: 0;
@@ -18,30 +9,50 @@ section {
   bottom: 0;
   background: rgba(0, 0, 0, 0.2);
   transition: all 300ms ease;
+}
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 0 $padding-distance;
+  border-radius: 10px;
+  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.1);
 
-  > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 64px;
-
-    border-radius: 8px;
-
-    box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.1);
+  &--open {
+    visibility: inherit;
+    opacity: 1;
+    backdrop-filter: blur(5px);
+  }
+  &--close {
+    visibility: hidden;
+    opacity: 0;
   }
 
-  button.close {
-    background: none;
-    color: inherit;
-    border: none;
-    font: inherit;
+  &__header {
+    padding-top: $padding-distance;
+  }
+
+  &__body {
+    padding: $padding-distance 0;
+  }
+
+  &__footer {
+    padding-bottom: $padding-distance;
+  }
+
+  &__header,
+  &__body,
+  &__footer {
+    width: 100%;
+    display: flex;
+  }
+
+  &__button {
     cursor: pointer;
-    outline: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 16px;
+    &--close {
+      margin-left: auto;
+    }
   }
 }

@@ -2,6 +2,11 @@ import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { IModalData } from '../../shared/services/modal.service';
 
+/**
+ * ? Tipo de botones posibles en el modal
+ */
+export type TModalButtons = 'save' | 'ok' | 'cancel' | 'close' | 'modify';
+
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
@@ -9,10 +14,6 @@ import { IModalData } from '../../shared/services/modal.service';
 })
 export class ModalComponent implements OnInit {
   // ANCHOR - Variables
-  // /**
-  //  * ? Observable del estado del modal
-  //  */
-  // public display$: Observable<IModalData> = this._modalSvc.watch();
 
   /**
    * ? Datos recibidos desde el observable del servicio del modal
@@ -22,7 +23,14 @@ export class ModalComponent implements OnInit {
   /**
    * ? Div donde insertar el componente
    */
-  @ViewChild('content', { read: ViewContainerRef }) content!: ViewContainerRef;
+  @ViewChild('contentString', { read: ViewContainerRef })
+  contentString!: ViewContainerRef;
+
+  /**
+   * ? Div donde insertar el componente
+   */
+  @ViewChild('contentComponent', { read: ViewContainerRef })
+  contentComponent!: ViewContainerRef;
 
   // ANCHOR - Constructor
   constructor(private _modalSvc: ModalService) {}
@@ -32,24 +40,32 @@ export class ModalComponent implements OnInit {
       next: (modalData: IModalData) => {
         this.display = modalData;
         if (!!modalData.content) {
-          (this.content.element.nativeElement as HTMLElement).innerHTML = '';
-          this.content.clear();
+          (this.contentString.element.nativeElement as HTMLElement).innerHTML =
+            '';
+          this.contentComponent.clear();
           if (typeof modalData.content !== 'string') {
-            this.content.createComponent(modalData.content as any);
+            this.contentComponent.createComponent(modalData.content as any);
           } else if (typeof modalData.content === 'string') {
-            (this.content.element.nativeElement as HTMLElement).innerHTML =
-              modalData.content;
+            (
+              this.contentString.element.nativeElement as HTMLElement
+            ).innerHTML = modalData.content;
           }
         }
       },
     });
   }
 
-  //FIXME Arreglar ng100
-  ngAfterViewInit(): void {}
-
   // ANCHOR - Métodos
-  public close(): void {
-    this._modalSvc.close();
+  public clickType(typeButton: TModalButtons): void {
+    const buttonMethods: { [type in TModalButtons]: () => void } = {
+      ok: () => {},
+      close: () => this._modalSvc.close(),
+      save: () => {},
+      cancel: () => {},
+      modify: () => {},
+    };
+    console.log(typeButton);
+
+    buttonMethods[typeButton]()
   }
 }

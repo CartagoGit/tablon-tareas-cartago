@@ -19,6 +19,8 @@ export class BoardPageComponent implements OnInit {
   ngOnInit(): void {}
 
   // ANCHOR - Métodos
+
+  //FIXME - Borrar cuando se termine de testear
   public openTask() {
     this._modalService.open(CreateTaskPageComponent);
   }
