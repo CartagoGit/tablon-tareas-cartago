@@ -1,35 +1,6 @@
-import { Component, Injectable, Type } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-/**
- * ? Tipo de posibles estados del modal
- */
-export type TModalState = 'open' | 'close';
-
-/**
- * REVIEW Implementar opciones
- * ? Opciones del modal a abrir
- */
-//TODO
-export interface IModalOptions {
-  buttons?: {
-    ok: boolean;
-    cancel: boolean;
-    close: boolean;
-    modify: boolean;
-  };
-}
-
-/**
- * ? Datos necesarios del modal
- */
-export interface IModalData {
-  component?: Type<any>;
-  text?: string;
-  options?: IModalOptions;
-  state?: TModalState;
-  data?: any;
-}
+import { IModalData } from '../structures/interfaces/modal.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +25,12 @@ export class ModalService {
    */
   private _display: BehaviorSubject<IModalData> =
     new BehaviorSubject<IModalData>(this._modalData);
+
+  /**
+   * ? Variables para saber que debe mostrarse en el modal
+   */
+  public hasHeader: boolean = false;
+  public hasFooter: boolean = false;
 
   // ANCHOR - Constructor
   constructor() {}

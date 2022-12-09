@@ -1,11 +1,6 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalService } from 'src/app/shared/services/modal.service';
-import { IModalData } from '../../shared/services/modal.service';
-
-/**
- * ? Tipo de botones posibles en el modal
- */
-export type TModalButtons = 'save' | 'ok' | 'cancel' | 'close' | 'modify';
+import { IModalData, TModalButtons } from 'src/app/shared/structures/interfaces/modal.interfaces';
 
 @Component({
   selector: 'app-modal',
