@@ -79,3 +79,11 @@ export interface IModalData {
   state?: TModalState;
   data?: any;
 }
+
+/**
+ * ? Datos a devolver cuando el modal se cierra
+ */
+export interface TModalDataClosed {
+  typeClose: string;
+  data?: any;
+}

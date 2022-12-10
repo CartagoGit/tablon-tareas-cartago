@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  filter,
+  Observable,
+  Subject,
+  takeWhile,
+  tap,
+} from 'rxjs';
+import { TModalDataClosed } from '../structures/interfaces/modal.interfaces';
 import {
   IModalData,
   IModalOptions,
@@ -126,6 +134,15 @@ export class ModalService {
   private _display: BehaviorSubject<IModalData> =
     new BehaviorSubject<IModalData>(this._modalData);
 
+  /**
+   * ? Subject a observar cuando el modal se cierra
+   * + Devuelve la data y el tipo de cierre
+   */
+  private _displayClosed: Subject<TModalDataClosed> =
+    new Subject<TModalDataClosed>();
+
+    
+
   // ANCHOR - Constructor
   constructor() {}
 
@@ -139,10 +156,30 @@ export class ModalService {
   }
 
   /**
+   * ? Crea subscripción hasta que el modal se cierre
+   */
+  private _createSubscriptionUntilClose(): void {
+    //* Nos subscribimos al cierre del modal para devolver los datos de cierre
+    this._display
+      .asObservable()
+      .pipe(
+        filter((display) => display.state === 'close'),
+        takeWhile((display) => display.state !== 'close', true)
+      )
+      .subscribe({
+        next: (modalData) => {
+          console.log(0, modalData.data);
+        },
+      });
+  }
+
+  /**
    * ? Abre el modal y recibe los datos para configurar la ventana
    * @params {IModalData} - Datos a recibir al abrir el modal
    */
-  public open(modalData: IModalData | undefined = undefined): void {
+  public open(
+    modalData: IModalData | undefined = undefined
+  ): void{
     // * Sobreponemos los datos al abrir el modal sobre los datos por default
     this._modalData = {
       ...this._defaultModalData,
@@ -151,13 +188,14 @@ export class ModalService {
       state: 'open',
     };
     this._display.next({ ...this._modalData });
+    this._createSubscriptionUntilClose();
   }
 
   /**
    * ? Close - Cierra el modal
    */
-  public close(): void {
-    console.log('close');
+  public close(typeClose: string = 'close'): void {
+    console.log(typeClose);
     this._modalData = {
       ...this._modalData,
       state: 'close',
@@ -170,7 +208,7 @@ export class ModalService {
    * TODO
    */
   public cancel(): void {
-    console.log('cancel');
+    this.close('cancel');
   }
 
   /**
@@ -178,14 +216,14 @@ export class ModalService {
    * TODO
    */
   public save(): void {
-    console.log('save');
+    this.close('save');
   }
   /**
    * ? Create - Crea los datos del modal
    * TODO
    */
   public create(): void {
-    console.log('create');
+    this.close('create');
   }
 
   /**
@@ -193,13 +231,13 @@ export class ModalService {
    * TODO
    */
   public modify(): void {
-    console.log('modify');
+    this.close('modify');
   }
   /**
    * ? Ok - Acepta los datos del modal
    * TODO
    */
   public ok(): void {
-    console.log('ok');
+    this.close('ok');
   }
 }

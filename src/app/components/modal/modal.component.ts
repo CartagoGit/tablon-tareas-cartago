@@ -224,15 +224,7 @@ export class ModalComponent implements OnInit {
    * @param typeButton {TModalButtons} - Tipo de botón pulsado
    */
   public clickBackdrop(typeButton: string): void {
-    // const buttonMethods: { [type in TModalButtons]: () => void } = {
-    //   ok: () => {},
-    //   close: () => this._modalSvc.close(),
-    //   save: () => {},
-    //   cancel: () => {},
-    //   modify: () => {},
-    // };
-    // console.log(typeButton);
-    // buttonMethods[typeButton]();
+
     this._modalSvc.close();
   }
 }

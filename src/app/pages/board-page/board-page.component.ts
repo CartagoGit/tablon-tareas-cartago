@@ -34,6 +34,7 @@ export class BoardPageComponent implements OnInit {
     this._modalService.open({ component: CreateTechPageComponent });
   }
   public openText(text: string) {
-    this._modalService.open({ text });
+    const modalRef = this._modalService.open({ text });
+    
   }
 }
