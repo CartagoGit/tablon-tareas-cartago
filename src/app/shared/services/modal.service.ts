@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
   IModalData,
   IModalOptions,
-  TModalButtons,
+  TModalButtonsDefault,
 } from '../structures/interfaces/modal.interfaces';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class ModalService {
   /**
    * ? Botones predefinidos del modal
    */
-  private _defaultButtons: TModalButtons = {
+  private _defaultButtons: TModalButtonsDefault = {
     close: {
       class: 'modal__button modal__button--close',
       text: 'Cerrar',
@@ -55,17 +55,32 @@ export class ModalService {
   };
 
   /**
-   * ? Opciones default del modal si no se reciben otras opciones
+   * ? Opciones default del modal si no se sobreescriben al crear el modal con otras opciones
    */
   private _defaultOptions: IModalOptions = {
     class: 'modal',
+    title: { text: 'Modal Title', class: 'modal__title' },
+    backdrop: { class: 'modal__backdrop', closeOnClick: false },
     header: {
-      title: 'Modal Title',
+      direction: 'column',
+      justify: 'between',
       buttons: {
         close: {
           ...this._defaultButtons.close!,
           text: 'X',
+          position: 30,
           // action: () => console.log('prueba'),
+        },
+        close2: {
+          ...this._defaultButtons.close!,
+          text: 'X2',
+          position: 1,
+          // action: () => console.log('prueba'),
+        },
+        other: {
+          action: () => console.log('otro rula'),
+          text: 'Otro boton',
+          position: 2,
         },
       },
       show: true,
@@ -76,10 +91,11 @@ export class ModalService {
       class: 'modal__body',
     },
     footer: {
-      show: false,
-      style: 'background: blue; color: red;',
+      show: true,
+      style: 'background: yellow; color:black;',
       justify: 'center',
       class: 'modal__footer',
+      buttons: this._defaultButtons,
     },
   };
 
@@ -137,6 +153,7 @@ export class ModalService {
    * ? Close - Cierra el modal
    */
   public close(): void {
+    console.log('close');
     this._modalData = {
       ...this._modalData,
       state: 'close',
@@ -150,7 +167,6 @@ export class ModalService {
    */
   public cancel(): void {
     console.log('cancel');
-    this.close();
   }
 
   /**
@@ -159,7 +175,6 @@ export class ModalService {
    */
   public save(): void {
     console.log('save');
-    this.close();
   }
   /**
    * ? Create - Crea los datos del modal
@@ -167,7 +182,6 @@ export class ModalService {
    */
   public create(): void {
     console.log('create');
-    this.close();
   }
 
   /**
@@ -176,7 +190,6 @@ export class ModalService {
    */
   public modify(): void {
     console.log('modify');
-    this.close();
   }
   /**
    * ? Ok - Acepta los datos del modal
@@ -184,6 +197,5 @@ export class ModalService {
    */
   public ok(): void {
     console.log('ok');
-    this.close();
   }
 }

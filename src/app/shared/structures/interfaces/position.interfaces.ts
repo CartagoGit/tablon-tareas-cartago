@@ -10,7 +10,6 @@ export type TPositions =
   | 'start'
   | 'center'
   | 'end'
-  | 'space-between'
-  | 'space-between'
-  | 'space-around'
-  | 'space-evenly';
+  | 'between'
+  | 'around'
+  | 'evenly';

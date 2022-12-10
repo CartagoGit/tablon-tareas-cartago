@@ -9,7 +9,7 @@ export type TModalState = 'open' | 'close';
 /**
  * ? Tipo de botones posibles en el modal
  */
-export type TModalButtonsDefault =
+export type TModalButtonDefault =
   | 'close'
   | 'cancel'
   | 'modify'
@@ -33,10 +33,11 @@ export type TModalButtonOptions = {
 /**
  * ? Tipo de las opciones de los botones del modal
  */
-export type TModalButtons = {
-  [type in TModalButtonsDefault]?: TModalButtonOptions;
-  // [key in string]: TModalButtonOptions ;
+export type TModalButtonsDefault = {
+  [type in TModalButtonDefault]?: TModalButtonOptions;
 };
+
+export type TModalButtonAny = { [key: string]: TModalButtonOptions };
 
 /**
  * ? Parametros de todas las secciones
@@ -54,14 +55,16 @@ export interface IModalSectionParamsHeaderAndFooter
   show: boolean;
   justify?: TPositions;
   direction?: TPositionDirection;
-  buttons?: TModalButtons;
+  buttons?: TModalButtonsDefault | TModalButtonAny;
 }
 
 /**
  * ? Opciones del modal a abrir
  */
 export interface IModalOptions extends IModalSectionParams {
-  header?: IModalSectionParamsHeaderAndFooter & { title: string };
+  backdrop?: IModalSectionParams & { closeOnClick?: boolean };
+  title?: IModalSectionParams & { text: string };
+  header?: IModalSectionParamsHeaderAndFooter;
   body?: IModalSectionParams;
   footer?: IModalSectionParamsHeaderAndFooter;
 }

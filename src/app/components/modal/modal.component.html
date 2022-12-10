@@ -1,18 +1,26 @@
 <ng-container *ngIf="!!display">
   <section
-    class="modal__backdrop"
+    #modalBackdrop
     [ngClass]="display.state === 'open' ? 'modal--open' : 'modal--close'"
-    (click)="clickType('close')"
+    (click)="clickBackdrop('backdrop')"
   >
     <div #modal (click)="$event.stopPropagation()">
       <div #modalHeader *ngIf="display.options?.header?.show">
-        <!-- <div
-          class="modal__button modal__button--close"
-          type="button"
-          (click)="clickType('close')"
-        >
-          X
-        </div> -->
+        <div #modalHeaderButtons>
+          <div
+            *ngFor="let button of buttonsGroup.header"
+            [class]="button.class"
+            [style]="button.style"
+            type="button"
+            (click)="button.action()"
+          >
+            {{ button.text }}
+          </div>
+        </div>
+
+        <h2 #modalTitle *ngIf="display.options?.title?.text">
+          {{ display.options?.title?.text }}
+        </h2>
       </div>
       <div #modalBody>
         <div #contentString *ngIf="display.text">{{ display.text }}</div>
@@ -20,6 +28,17 @@
       </div>
 
       <div #modalFooter *ngIf="display.options?.footer?.show">
+        <div #modalFooterButtons>
+          <div
+            *ngFor="let button of buttonsGroup.footer"
+            [class]="button.class"
+            [style]="button.style"
+            type="button"
+            (click)="button.action()"
+          >
+            {{ button.text }}
+          </div>
+        </div>
         <!-- <div
           type="button"
           (click)="clickType('save')"

@@ -7,8 +7,13 @@ import {
 } from '@angular/core';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import {
+  TPositionDirection,
+  TPositions,
+} from '../../shared/structures/interfaces/position.interfaces';
+import {
   IModalData,
-  TModalButtonsDefault,
+  TModalButtonDefault,
+  TModalButtonOptions,
 } from 'src/app/shared/structures/interfaces/modal.interfaces';
 
 @Component({
@@ -28,21 +33,29 @@ export class ModalComponent implements OnInit {
    * ? ElementRef de Cabecera, Body y Footer del modal
    */
   @ViewChild('modal') modal!: ElementRef<HTMLDivElement>;
+  @ViewChild('modalTitle') modalTitle!: ElementRef<HTMLDivElement>;
+  @ViewChild('modalBackdrop') modalBackdrop!: ElementRef<HTMLDivElement>;
   @ViewChild('modalHeader') modalHeader!: ElementRef<HTMLDivElement>;
+  @ViewChild('modalHeaderButtons')
+  modalHeaderButtons!: ElementRef<HTMLDivElement>;
   @ViewChild('modalBody') modalBody!: ElementRef<HTMLDivElement>;
   @ViewChild('modalFooter') modalFooter!: ElementRef<HTMLDivElement>;
-
-  /**
-   * ? Div donde insertar el texto plano enviado al modal
-   */
-  // @ViewChild('contentString', { read: ViewContainerRef })
-  // contentString!: ViewContainerRef;
+  @ViewChild('modalFooterButtons')
+  modalFooterButtons!: ElementRef<HTMLDivElement>;
 
   /**
    * ? Div donde insertar el componente
    */
   @ViewChild('contentComponent', { read: ViewContainerRef })
   contentComponent!: ViewContainerRef;
+
+  /**
+   * ? Lista de botones a mostrar
+   */
+  public buttonsGroup = {
+    header: [] as TModalButtonOptions[],
+    footer: [] as TModalButtonOptions[],
+  };
 
   // ANCHOR - Constructor
   constructor(private _modalSvc: ModalService) {}
@@ -62,6 +75,12 @@ export class ModalComponent implements OnInit {
 
         //* Inyectamos los estilos y las clases a las secciones
         this._setSectionStylesAndClasses();
+
+        //* Añadimos la posición de las secciones de header y footer respecto al flex
+        this._setSectionPosition();
+
+        //* Creamos botones
+        this._createButtons();
       },
     });
   }
@@ -80,10 +99,8 @@ export class ModalComponent implements OnInit {
    */
   private _fillContent(): void {
     if (!!this.display?.component) {
-      {
-        this.display.text = undefined;
-        this.contentComponent.createComponent(this.display.component);
-      }
+      this.display.text = undefined;
+      this.contentComponent.createComponent(this.display.component);
     }
   }
 
@@ -98,6 +115,13 @@ export class ModalComponent implements OnInit {
       options?.style,
       options?.class
     );
+    //* Título
+    this.modalTitle &&
+      this._setStylesAndClasses(
+        this.modalTitle.nativeElement,
+        options?.title?.style,
+        options?.title?.class
+      );
     //* Header
     this.modalHeader &&
       this._setStylesAndClasses(
@@ -119,11 +143,18 @@ export class ModalComponent implements OnInit {
         options?.footer?.style,
         options?.footer?.class
       );
+    //* Backdrop
+    this.modalBackdrop &&
+      this._setStylesAndClasses(
+        this.modalBackdrop.nativeElement,
+        options?.backdrop?.style,
+        options?.backdrop?.class
+      );
   }
 
   /**
    * ? Fija las clases y estilos por cada elemento
-   * @params {HTMLDivElement} element
+   * @param {HTMLDivElement} element
    * @param {string} style
    * @param {string} className
    */
@@ -137,10 +168,58 @@ export class ModalComponent implements OnInit {
   }
 
   /**
+   * ? Fija la posicion de los elementos de la sección
+   */
+  private _setSectionPosition(): void {
+    const { header, footer } = this.display?.options!;
+
+    header?.direction &&
+      this.modalHeader?.nativeElement.classList.add(
+        'position__direction--' + header?.direction
+      );
+    footer?.direction &&
+      this.modalFooter?.nativeElement.classList.add(
+        'position__direction--' + footer?.direction
+      );
+
+    header?.justify &&
+      this.modalHeaderButtons?.nativeElement.classList.add(
+        'position__justify--' + header.justify
+      );
+    footer?.justify &&
+      this.modalFooterButtons?.nativeElement.classList.add(
+        'position__justify--' + footer.justify
+      );
+  }
+
+  /**
+   * ? Crea botones segun las opciones recibidas al crear el modal
+   */
+  private _createButtons(): void {
+    const { options } = this.display!;
+
+    const orderByPosition =
+      () => (a: TModalButtonOptions, b: TModalButtonOptions) => {
+        let x: number = a.position || 0;
+        let y: number = b.position || 0;
+
+        return x - y;
+      };
+
+    //* Ordenar los botones segun su posición dada al crear el boton
+    this.buttonsGroup.header = options?.header?.buttons
+      ? Object.values(options?.header?.buttons!).sort(orderByPosition())
+      : [];
+    this.buttonsGroup.footer = options?.footer?.buttons
+      ? Object.values(options?.footer?.buttons!).sort(orderByPosition())
+      : [];
+  }
+
+  /**
    * ? Método al hacer click en cualquiera de los tipos de botones del modal
    * @param typeButton {TModalButtons} - Tipo de botón pulsado
    */
-  public clickType(typeButton: TModalButtonsDefault): void {
+  public clickBackdrop(typeButton: string): void {
     // const buttonMethods: { [type in TModalButtons]: () => void } = {
     //   ok: () => {},
     //   close: () => this._modalSvc.close(),
