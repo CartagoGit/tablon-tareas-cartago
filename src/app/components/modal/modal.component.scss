@@ -12,13 +12,17 @@ $padding-distance: 16px;
 }
 .modal {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   top: 50%;
   left: 50%;
+  // width: 100%;
   transform: translate(-50%, -50%);
   background: white;
-  padding: 0 $padding-distance;
+  // padding:  $padding-distance;
   border-radius: 10px;
   box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 
   &--open {
     visibility: inherit;
@@ -35,7 +39,7 @@ $padding-distance: 16px;
   }
 
   &__body {
-    padding: $padding-distance 0;
+    padding: $padding-distance $padding-distance*2 ;
   }
 
   &__footer {
@@ -45,7 +49,7 @@ $padding-distance: 16px;
   &__header,
   &__body,
   &__footer {
-    width: 100%;
+    // width: 100%;
     display: flex;
   }
 

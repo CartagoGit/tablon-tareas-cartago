@@ -1,6 +1,10 @@
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IModalData } from '../structures/interfaces/modal.interfaces';
+import {
+  IModalData,
+  IModalOptions,
+  TModalButtons,
+} from '../structures/interfaces/modal.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -9,28 +13,98 @@ export class ModalService {
   // ANCHOR - Variables
 
   /**
-   * ? Inializador del contenido y de las opciones
+   * ? Botones predefinidos del modal
    */
-  private _modalData: IModalData = {
+  private _defaultButtons: TModalButtons = {
+    close: {
+      class: 'modal__button modal__button--close',
+      text: 'Cerrar',
+      action: () => this.close(),
+      position: 1,
+    },
+    cancel: {
+      class: 'modal__button modal__button--cancel',
+      text: 'Cancelar',
+      action: () => this.cancel(),
+      position: 2,
+    },
+    modify: {
+      class: 'modal__button modal__button--modify',
+      text: 'Modificar',
+      action: () => this.modify(),
+      position: 3,
+    },
+    ok: {
+      class: 'modal__button modal__button--ok',
+      text: 'Aceptar',
+      action: () => this.ok(),
+      position: 4,
+    },
+    save: {
+      class: 'modal__button modal__button--save',
+      text: 'Guardar',
+      action: () => this.save(),
+      position: 5,
+    },
+    create: {
+      class: 'modal__button modal__button--create',
+      text: 'Crear',
+      action: () => this.create(),
+      position: 6,
+    },
+  };
+
+  /**
+   * ? Opciones default del modal si no se reciben otras opciones
+   */
+  private _defaultOptions: IModalOptions = {
+    class: 'modal',
+    header: {
+      title: 'Modal Title',
+      buttons: {
+        close: {
+          ...this._defaultButtons.close!,
+          text: 'X',
+          // action: () => console.log('prueba'),
+        },
+      },
+      show: true,
+      style: 'background: purple; color: blue;',
+      class: 'modal__header',
+    },
+    body: {
+      class: 'modal__body',
+    },
+    footer: {
+      show: false,
+      style: 'background: blue; color: red;',
+      justify: 'center',
+      class: 'modal__footer',
+    },
+  };
+
+  /**
+   * ? Datos del Modal por default
+   */
+  private _defaultModalData: IModalData = {
     component: undefined,
-    text: undefined,
-    options: undefined,
+    text: 'Default text Modal',
+    options: this._defaultOptions,
     data: undefined,
     state: 'close',
   };
 
   /**
+   * ? Inializador del contenido y de las opciones
+   */
+  private _modalData: IModalData = this._defaultModalData;
+
+  /**
    * ? Subject a observar de todos los datos del modal
-   * + Se inicializa cerrado
+   * + Se inicializa con los datos por defecto
    */
   private _display: BehaviorSubject<IModalData> =
     new BehaviorSubject<IModalData>(this._modalData);
-
-  /**
-   * ? Variables para saber que debe mostrarse en el modal
-   */
-  public hasHeader: boolean = false;
-  public hasFooter: boolean = false;
 
   // ANCHOR - Constructor
   constructor() {}
@@ -49,13 +123,18 @@ export class ModalService {
    * @params {IModalData} - Datos a recibir al abrir el modal
    */
   public open(modalData: IModalData | undefined = undefined): void {
-    console.log(this._modalData);
-    this._modalData = { ...modalData, state: 'open' };
+    // * Sobreponemos los datos al abrir el modal sobre los datos por default
+    this._modalData = {
+      ...this._defaultModalData,
+      ...modalData,
+      text: modalData?.component ? undefined : modalData?.text,
+      state: 'open',
+    };
     this._display.next({ ...this._modalData });
   }
 
   /**
-   * ? Cierra el modal
+   * ? Close - Cierra el modal
    */
   public close(): void {
     this._modalData = {
@@ -63,5 +142,48 @@ export class ModalService {
       state: 'close',
     };
     this._display.next(this._modalData);
+  }
+
+  /**
+   * ? Cancel - Cancela el modal
+   * TODO
+   */
+  public cancel(): void {
+    console.log('cancel');
+    this.close();
+  }
+
+  /**
+   * ? Save - Guarda los datos del modal
+   * TODO
+   */
+  public save(): void {
+    console.log('save');
+    this.close();
+  }
+  /**
+   * ? Create - Crea los datos del modal
+   * TODO
+   */
+  public create(): void {
+    console.log('create');
+    this.close();
+  }
+
+  /**
+   * ? Modify - Modifica los datos del modal
+   * TODO
+   */
+  public modify(): void {
+    console.log('modify');
+    this.close();
+  }
+  /**
+   * ? Ok - Acepta los datos del modal
+   * TODO
+   */
+  public ok(): void {
+    console.log('ok');
+    this.close();
   }
 }

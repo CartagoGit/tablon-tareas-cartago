@@ -1,4 +1,5 @@
 import { Type } from '@angular/core';
+import { TPositionDirection, TPositions } from './position.interfaces';
 
 /**
  * ? Tipo de posibles estados del modal
@@ -8,33 +9,61 @@ export type TModalState = 'open' | 'close';
 /**
  * ? Tipo de botones posibles en el modal
  */
-export type TModalButtons = 'save' | 'ok' | 'cancel' | 'close' | 'modify';
+export type TModalButtonsDefault =
+  | 'close'
+  | 'cancel'
+  | 'modify'
+  | 'ok'
+  | 'save'
+  | 'create';
 
 /**
- * ? IModalButtonsOptions
+ * ? Opciones de cada Botón
  */
 export type TModalButtonOptions = {
-  [type in TModalButtons]?: {
-    style?: string;
-    text?: string;
-    position?: {};
-  };
+  style?: string;
+  class?: string;
+  text?: string;
+  position?: number;
+  action: () => void;
+  // show: boolean;
+  // self?: TPositions;
 };
 
 /**
- * REVIEW Implementar opciones
+ * ? Tipo de las opciones de los botones del modal
+ */
+export type TModalButtons = {
+  [type in TModalButtonsDefault]?: TModalButtonOptions;
+  // [key in string]: TModalButtonOptions ;
+};
+
+/**
+ * ? Parametros de todas las secciones
+ */
+export interface IModalSectionParams {
+  style?: string;
+  class?: string;
+}
+
+/**
+ * ? Parametros extendidos de las secciones de Header y Footer
+ */
+export interface IModalSectionParamsHeaderAndFooter
+  extends IModalSectionParams {
+  show: boolean;
+  justify?: TPositions;
+  direction?: TPositionDirection;
+  buttons?: TModalButtons;
+}
+
+/**
  * ? Opciones del modal a abrir
  */
-//TODO
-export interface IModalOptions {
-  header?: {
-    style?: string;
-    buttons?: TModalButtonOptions;
-  };
-  footer?: {
-    style?: string;
-    buttons?: TModalButtonOptions;
-  };
+export interface IModalOptions extends IModalSectionParams {
+  header?: IModalSectionParamsHeaderAndFooter & { title: string };
+  body?: IModalSectionParams;
+  footer?: IModalSectionParamsHeaderAndFooter;
 }
 
 /**

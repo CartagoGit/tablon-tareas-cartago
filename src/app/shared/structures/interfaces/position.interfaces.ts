@@ -1,12 +1,12 @@
 /**
  * ? Orden de los elementos
  */
-export type TPositionOrder = 'row' | 'column';
+export type TPositionDirection = 'row' | 'column';
 
 /**
  * ? Posiciones de los elementos en fila
  */
-export type TPositionsJustify =
+export type TPositions =
   | 'start'
   | 'center'
   | 'end'

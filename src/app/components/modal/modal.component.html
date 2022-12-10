@@ -4,23 +4,23 @@
     [ngClass]="display.state === 'open' ? 'modal--open' : 'modal--close'"
     (click)="clickType('close')"
   >
-    <div (click)="$event.stopPropagation()" class="modal">
-      <div class="modal__header">
-        <div
+    <div #modal (click)="$event.stopPropagation()">
+      <div #modalHeader *ngIf="display.options?.header?.show">
+        <!-- <div
           class="modal__button modal__button--close"
           type="button"
           (click)="clickType('close')"
         >
           X
-        </div>
+        </div> -->
       </div>
-      <div class="modal__body">
-        <div #contentString></div>
+      <div #modalBody>
+        <div #contentString *ngIf="display.text">{{ display.text }}</div>
         <ng-template #contentComponent></ng-template>
       </div>
 
-      <div class="modal__footer">
-        <div
+      <div #modalFooter *ngIf="display.options?.footer?.show">
+        <!-- <div
           type="button"
           (click)="clickType('save')"
           class="modal__button modal__button--save"
@@ -54,7 +54,7 @@
           class="modal__button modal__button--cancel"
         >
           Cancelar
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
