@@ -93,9 +93,13 @@ export class ModalService {
     footer: {
       show: true,
       style: 'background: yellow; color:black;',
-      justify: 'center',
+      justify: 'evenly',
+      direction: 'column',
       class: 'modal__footer',
-      buttons: this._defaultButtons,
+      buttons: {
+        close: this._defaultButtons.close,
+        guardar: this._defaultButtons.save,
+      },
     },
   };
 

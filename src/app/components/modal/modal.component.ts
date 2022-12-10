@@ -108,47 +108,51 @@ export class ModalComponent implements OnInit {
    * ? Fija los estilos y clases de las secciones de la modal recibidos al crear el modal
    */
   private _setSectionStylesAndClasses(): void {
-    const { options } = this.display!;
+    const {
+      style,
+      class: className,
+      title,
+      header,
+      footer,
+      backdrop,
+      body,
+    } = this.display?.options!;
     //* Modal
-    this._setStylesAndClasses(
-      this.modal.nativeElement,
-      options?.style,
-      options?.class
-    );
+    this._setStylesAndClasses(this.modal.nativeElement, style, className);
     //* Título
     this.modalTitle &&
       this._setStylesAndClasses(
         this.modalTitle.nativeElement,
-        options?.title?.style,
-        options?.title?.class
+        title?.style,
+        title?.class
       );
     //* Header
     this.modalHeader &&
       this._setStylesAndClasses(
         this.modalHeader.nativeElement,
-        options?.header?.style,
-        options?.header?.class
+        header?.style,
+        header?.class
       );
     //* Body
     this.modalBody &&
       this._setStylesAndClasses(
         this.modalBody.nativeElement,
-        options?.body?.style,
-        options?.body?.class
+        body?.style,
+        body?.class
       );
     //* Footer
     this.modalFooter &&
       this._setStylesAndClasses(
         this.modalFooter.nativeElement,
-        options?.footer?.style,
-        options?.footer?.class
+        footer?.style,
+        footer?.class
       );
     //* Backdrop
     this.modalBackdrop &&
       this._setStylesAndClasses(
         this.modalBackdrop.nativeElement,
-        options?.backdrop?.style,
-        options?.backdrop?.class
+        backdrop?.style,
+        backdrop?.class
       );
   }
 
