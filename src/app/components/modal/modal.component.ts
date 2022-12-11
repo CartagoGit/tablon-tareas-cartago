@@ -92,6 +92,7 @@ export class ModalComponent implements OnInit {
    */
   private _cleanContent(): void {
     this.modalBody && this.contentComponent.clear();
+    this._modalSvc.componentRef = undefined;
   }
 
   /**
@@ -100,7 +101,10 @@ export class ModalComponent implements OnInit {
   private _fillContent(): void {
     if (!!this.display?.component) {
       this.display.text = undefined;
-      this.contentComponent.createComponent(this.display.component);
+      const componentRef = this.contentComponent.createComponent(
+        this.display.component
+      );
+      this._modalSvc.componentRef = componentRef;
     }
   }
 
@@ -220,11 +224,10 @@ export class ModalComponent implements OnInit {
   }
 
   /**
-   * ? Método al hacer click en cualquiera de los tipos de botones del modal
-   * @param typeButton {TModalButtons} - Tipo de botón pulsado
+   * ? Método al hacer click en el backdrop
+   * @param typeClick {string} - Tipo de botón pulsado
    */
-  public clickBackdrop(typeButton: string): void {
-
-    this._modalSvc.close();
+  public clickBackdrop(typeClick: string): void {
+    this._modalSvc.close(typeClick);
   }
 }

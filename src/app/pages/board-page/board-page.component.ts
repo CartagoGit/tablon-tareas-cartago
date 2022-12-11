@@ -31,10 +31,20 @@ export class BoardPageComponent implements OnInit {
     this._modalService.open({ component: CreateSectionPageComponent });
   }
   public openTech() {
-    this._modalService.open({ component: CreateTechPageComponent });
+    const modalRef = this._modalService.open({
+      component: CreateTechPageComponent,
+      options: {
+        footer: { show: true },
+      },
+    });
+    modalRef.afterClosed.subscribe({
+      next: (resp) => console.log(resp),
+    });
   }
   public openText(text: string) {
     const modalRef = this._modalService.open({ text });
-    
+    modalRef.afterClosed.subscribe({
+      next: (resp) => console.log(resp),
+    });
   }
 }

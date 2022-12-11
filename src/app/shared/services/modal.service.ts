@@ -1,13 +1,16 @@
-import { Injectable } from '@angular/core';
+import { ComponentRef, Injectable } from '@angular/core';
 import {
   BehaviorSubject,
   filter,
   Observable,
   Subject,
+  take,
   takeWhile,
-  tap,
 } from 'rxjs';
-import { TModalDataClosed } from '../structures/interfaces/modal.interfaces';
+import {
+  IModalDataClosed,
+  IModalRef,
+} from '../structures/interfaces/modal.interfaces';
 import {
   IModalData,
   IModalOptions,
@@ -71,7 +74,7 @@ export class ModalService {
     backdrop: { class: 'modal__backdrop', closeOnClick: false },
     header: {
       direction: 'column',
-      justify: 'between',
+      justify: 'end',
       buttons: {
         close: {
           ...this._defaultButtons.close!,
@@ -79,27 +82,16 @@ export class ModalService {
           position: 30,
           // action: () => console.log('prueba'),
         },
-        close2: {
-          ...this._defaultButtons.close!,
-          text: 'X2',
-          position: 1,
-          // action: () => console.log('prueba'),
-        },
-        other: {
-          action: () => console.log('otro rula'),
-          text: 'Otro boton',
-          position: 2,
-        },
       },
       show: true,
-      style: 'background: purple; color: blue;',
+      // style: 'background: purple; color: blue;',
       class: 'modal__header',
     },
     body: {
       class: 'modal__body',
     },
     footer: {
-      show: true,
+      show: false,
       style: 'background: yellow; color:black;',
       justify: 'evenly',
       direction: 'column',
@@ -138,10 +130,33 @@ export class ModalService {
    * ? Subject a observar cuando el modal se cierra
    * + Devuelve la data y el tipo de cierre
    */
-  private _displayClosed: Subject<TModalDataClosed> =
-    new Subject<TModalDataClosed>();
+  private _displayClosed: Subject<IModalDataClosed> =
+    new Subject<IModalDataClosed>();
 
-    
+  /**
+   * ? Refencia al Componente del Modal
+   */
+  private _componentRef: ComponentRef<any> | undefined;
+  set componentRef(value: ComponentRef<any> | undefined) {
+    this._componentRef = value;
+  }
+  get componentRef() {
+    return this._componentRef;
+  }
+
+  /**
+   * ? Referencia al modal en si
+   */
+  private _modalRef: IModalRef = {
+    afterClosed: this._afterClosed(),
+    close: () => this.close('close'),
+    componentRef: this.componentRef,
+    state: this._modalData.state,
+    options: this._modalData.options,
+    data: this._modalData.data,
+    text: this._modalData.text,
+    component: this._modalData.component,
+  };
 
   // ANCHOR - Constructor
   constructor() {}
@@ -149,10 +164,18 @@ export class ModalService {
   // ANCHOR - Métodos
   /**
    * ? Retorna el observable del estado del modal
-   * @return {Observable<BehaviorSubject<TModalState>}
+   * @return {Observable<IModalData>}
    */
   public watch(): Observable<IModalData> {
     return this._display.asObservable();
+  }
+
+  /**
+   * ? Retorna el observable con el resultado al cerrar el modal
+   * @return {Observable<Subject<TModalDataClosed>}
+   */
+  private _afterClosed(): Observable<IModalDataClosed> {
+    return this._displayClosed.asObservable().pipe(take(1));
   }
 
   /**
@@ -160,15 +183,17 @@ export class ModalService {
    */
   private _createSubscriptionUntilClose(): void {
     //* Nos subscribimos al cierre del modal para devolver los datos de cierre
-    this._display
-      .asObservable()
+    this.watch()
       .pipe(
         filter((display) => display.state === 'close'),
         takeWhile((display) => display.state !== 'close', true)
       )
       .subscribe({
         next: (modalData) => {
-          console.log(0, modalData.data);
+          this._displayClosed.next({ data: modalData.data, typeClose: 'algo' });
+        },
+        complete: () => {
+          this._componentRef = undefined;
         },
       });
   }
@@ -176,11 +201,12 @@ export class ModalService {
   /**
    * ? Abre el modal y recibe los datos para configurar la ventana
    * @params {IModalData} - Datos a recibir al abrir el modal
+   * @return {IModalRef} - Datos y metodos de referencia del modal
    */
-  public open(
-    modalData: IModalData | undefined = undefined
-  ): void{
+  public open(modalData: IModalData | undefined = undefined): IModalRef {
     // * Sobreponemos los datos al abrir el modal sobre los datos por default
+    console.log(modalData);
+    this._modalData = { ...this._defaultModalData };
     this._modalData = {
       ...this._defaultModalData,
       ...modalData,
@@ -189,13 +215,13 @@ export class ModalService {
     };
     this._display.next({ ...this._modalData });
     this._createSubscriptionUntilClose();
+    return this._modalRef;
   }
 
   /**
    * ? Close - Cierra el modal
    */
-  public close(typeClose: string = 'close'): void {
-    console.log(typeClose);
+  public close(typeClose: string = 'close', dataClose: any = undefined): void {
     this._modalData = {
       ...this._modalData,
       state: 'close',

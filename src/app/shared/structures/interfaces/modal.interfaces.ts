@@ -1,4 +1,5 @@
-import { Type } from '@angular/core';
+import { ComponentRef, Type } from '@angular/core';
+import { Observable } from 'rxjs';
 import { TPositionDirection, TPositions } from './position.interfaces';
 
 /**
@@ -83,7 +84,21 @@ export interface IModalData {
 /**
  * ? Datos a devolver cuando el modal se cierra
  */
-export interface TModalDataClosed {
+export interface IModalDataClosed {
   typeClose: string;
   data?: any;
+}
+
+/**
+ * ? Interfaz de la referencia del modal
+ */
+export interface IModalRef {
+  afterClosed: Observable<IModalDataClosed>;
+  close: () => void;
+  componentRef?: ComponentRef<any>;
+  state?: TModalState;
+  options?: IModalOptions;
+  data?: any;
+  text?: string;
+  component?: Type<any>;
 }
