@@ -1,4 +1,5 @@
 import { ComponentRef, Injectable } from '@angular/core';
+import { TModalButtonAny } from '../structures/interfaces/modal.interfaces';
 import {
   BehaviorSubject,
   filter,
@@ -26,11 +27,11 @@ export class ModalService {
   /**
    * ? Botones predefinidos del modal
    */
-  private _defaultButtons: TModalButtonsDefault = {
+  public defaultButtons: TModalButtonsDefault = {
     close: {
       class: 'modal__button modal__button--close',
       text: 'Cerrar',
-      action: () => this.close(),
+      action: () => this.close('close'),
       position: 1,
     },
     cancel: {
@@ -73,11 +74,11 @@ export class ModalService {
     title: { text: 'Modal Title', class: 'modal__title' },
     backdrop: { class: 'modal__backdrop', closeOnClick: true },
     header: {
-      direction: 'column',
       justify: 'end',
+      direction: 'column',
       buttons: {
         close: {
-          ...this._defaultButtons.close!,
+          ...this.defaultButtons.close!,
           text: 'X',
         },
       },
@@ -89,13 +90,12 @@ export class ModalService {
     },
     footer: {
       show: false,
-      style: 'background: yellow; color:black;',
       justify: 'evenly',
       direction: 'column',
       class: 'modal__footer',
       buttons: {
-        close: this._defaultButtons.close,
-        guardar: this._defaultButtons.save,
+        close: this.defaultButtons.close,
+        guardar: this.defaultButtons.save,
       },
     },
   };
@@ -155,7 +155,18 @@ export class ModalService {
     component: this._modalData.component,
   };
 
+  /**
+   * ? Tipo de boton pulsado al cerrar el modal
+   */
+  private _typeClose: keyof TModalButtonsDefault | keyof TModalButtonAny = '';
+
   // ANCHOR - Constructor
+  /**
+   * NOTE - El modal creara en el componente una variable "dataRecived" con los datos pasados al modal
+   * NOTE - A su vez devolvera al cerrar el modal la variable 'dataToSend' del componente
+   * NOTE - En caso de no tener devolvera undefined
+  */
+
   constructor() {}
 
   // ANCHOR - Métodos
@@ -168,7 +179,7 @@ export class ModalService {
   }
 
   /**
-   * ? Retorna el observable con el resultado al cerrar el modal
+   * ? Retorna el observable con el resultado al cerrar el modal y termina la subscripción
    * @return {Observable<Subject<TModalDataClosed>}
    */
   private _afterClosed(): Observable<IModalDataClosed> {
@@ -183,21 +194,21 @@ export class ModalService {
     this.watch()
       .pipe(
         filter((display) => display.state === 'close'),
-        takeWhile((display) => display.state !== 'close', true)
+        take(1)
       )
       .subscribe({
         next: (modalData) => {
-          this._displayClosed.next({ data: modalData.data, typeClose: 'algo' });
-        },
-        complete: () => {
-          // this._componentRef?.destroy();
-          this._componentRef = undefined;
+          this._displayClosed.next({
+            data: this._componentRef?.instance.dataToSend,
+            typeClose: this._typeClose as string,
+          });
         },
       });
   }
 
   /**
-   * ? Devuelve las opciones mixeadas entre las recibidas y las default
+   * ? Devuelve las opciones mixeadas entre las recibidas y las default.
+   * @param {IModalOptions | undefined} injectedOptions - Opciones recibidas al crear el modal
    */
   private _getMixedOptions(
     injectedOptions: IModalOptions | undefined
@@ -226,12 +237,12 @@ export class ModalService {
 
   /**
    * ? Abre el modal y recibe los datos para configurar la ventana
-   * @params {IModalData} - Datos a recibir al abrir el modal
+   * @param {IModalData | undefined } modalData - Datos a recibir al abrir el modal / default = undefined
    * @return {IModalRef}  Datos y metodos de referencia del modal
    */
   public open(modalData: IModalData | undefined = undefined): IModalRef {
     // * Sobreponemos los datos al abrir el modal sobre los datos por default
-
+    this._typeClose = '';
     const newOptions = this._getMixedOptions(modalData?.options);
     this._modalData = {
       ...this._defaultModalData,
@@ -247,12 +258,15 @@ export class ModalService {
 
   /**
    * ? Close - Cierra el modal
+   * @param {string} typeClose - Nombre del tipo de cierre del modal / default = close
+   * @param {any} dataClose - Datos a devolver cuando el componente se cierre / default = undefined
    */
-  public close(typeClose: string = 'close', dataClose: any = undefined): void {
+  public close(typeClose: string): void {
     this._modalData = {
       ...this._modalData,
       state: 'close',
     };
+    this._typeClose = typeClose;
     this._display.next(this._modalData);
   }
 

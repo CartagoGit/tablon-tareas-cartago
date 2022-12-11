@@ -118,6 +118,7 @@ export class ModalComponent implements OnInit {
         this.display.component
       );
       this._modalSvc.componentRef = componentRef;
+      this._modalSvc.componentRef.instance.dataRecived = this.display.data;
     }
   }
 

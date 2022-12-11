@@ -13,8 +13,10 @@ import { CreateTechPageComponent } from '../modals/create-models/create-tech-pag
 export class BoardPageComponent implements OnInit {
   // ANCHOR Variables
 
+  public dataRecibida: any;
+
   // ANCHOR Constructor
-  constructor(private _modalService: ModalService) {}
+  constructor(private _modalSvc: ModalService) {}
 
   ngOnInit(): void {}
 
@@ -22,16 +24,44 @@ export class BoardPageComponent implements OnInit {
 
   //FIXME - Borrar cuando se termine de testear
   public openTask() {
-    this._modalService.open({ component: CreateTaskPageComponent });
+    this._modalSvc.open({ component: CreateTaskPageComponent });
   }
   public openObjetive() {
-    this._modalService.open({ component: CreateObjetivePageComponent });
+    const modalRef = this._modalSvc.open({
+      component: CreateObjetivePageComponent,
+      data: 'jouoju',
+      options: {
+        header: {
+          show: true,
+          buttons: {
+            cerrar: {
+              text: 'cerralo',
+              action: () => this._modalSvc.close('cerrao'),
+            },
+          },
+        },
+        footer: {
+          show: true,
+        },
+      },
+    });
+
+    modalRef.afterClosed.subscribe({
+      next: (modalData) => {
+        console.log(modalData.data);
+        this.dataRecibida = modalData.typeClose;
+        // this.dataRecibida = modalData.data;
+      },
+    });
   }
   public openSection() {
-    this._modalService.open({ component: CreateSectionPageComponent });
+    this._modalSvc.open({
+      component: CreateSectionPageComponent,
+      options: { footer: { show: true } },
+    });
   }
   public openTech() {
-    const modalRef = this._modalService.open({
+    const modalRef = this._modalSvc.open({
       component: CreateTechPageComponent,
       options: {
         footer: {
@@ -47,7 +77,7 @@ export class BoardPageComponent implements OnInit {
     });
   }
   public openText(text: string) {
-    const modalRef = this._modalService.open({ text });
+    const modalRef = this._modalSvc.open({ text });
     modalRef.afterClosed.subscribe({
       next: (resp) => console.log(resp),
     });

@@ -6,13 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-objetive-page.component.scss'],
 })
 export class CreateObjetivePageComponent implements OnInit {
-  public varPrueba: string = 'Hola';
+  // public varPrueba: string = 'Hola';
+  // dataRecived: any;
+  dataToSend: any = 'algo123';
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // console.log(1, this.dataRecived);
+  }
 
   ngOnDestroy(): void {
-    console.log(this.varPrueba);
+    // console.log(this.varPrueba);
   }
 }
