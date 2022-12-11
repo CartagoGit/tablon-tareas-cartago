@@ -67,7 +67,7 @@ h2 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  background: whitesmoke;
   border-radius: 10px;
   box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -116,8 +116,37 @@ h2 {
 
   &__button {
     cursor: pointer;
-    // &--close {
-    //   margin-left: auto;
-    // }
+    padding: 5px 10px;
+    margin: 5px 10px;
+    border: black solid 1px;
+    background-color: grey;
+    transition: ease all 300ms;
+    border-radius: 10px;
+    color: white;
+    &:hover {
+      color: black;
+      // border: white 1px solid;
+      background-color: inherit;
+      // filter: brightness(0.8);
+    }
+    &--save {
+      background-color: green;
+    }
+    &--close,
+    &--cancel {
+      background-color: crimson;
+    }
+
+    &--modify {
+      background-color: blue;
+    }
+
+    &--create {
+      background-color: blueviolet;
+    }
+
+    &--ok {
+      background-color: black;
+    }
   }
 }

@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class CreateObjetivePageComponent implements OnInit {
   // public varPrueba: string = 'Hola';
   // dataRecived: any;
-  dataToSend: any = 'algo123';
+  // dataToSend: any = 'algo123';
 
   constructor() {}
 

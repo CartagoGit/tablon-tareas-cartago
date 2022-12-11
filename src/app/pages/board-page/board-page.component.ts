@@ -42,6 +42,14 @@ export class BoardPageComponent implements OnInit {
         },
         footer: {
           show: true,
+          buttons: {
+            close: this._modalSvc.defaultButtons.close,
+            ok: this._modalSvc.defaultButtons.ok,
+            save: this._modalSvc.defaultButtons.save,
+            modify: this._modalSvc.defaultButtons.modify,
+            cancel: this._modalSvc.defaultButtons.cancel,
+            create: this._modalSvc.defaultButtons.create,
+          },
         },
       },
     });
