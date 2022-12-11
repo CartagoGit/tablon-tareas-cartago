@@ -64,7 +64,7 @@ export interface IModalSectionParamsHeaderAndFooter
  */
 export interface IModalOptions extends IModalSectionParams {
   backdrop?: IModalSectionParams & { closeOnClick?: boolean };
-  title?: IModalSectionParams & { text: string };
+  title?: IModalSectionParams & { text: string; show: boolean };
   header?: IModalSectionParamsHeaderAndFooter;
   body?: IModalSectionParams;
   footer?: IModalSectionParamsHeaderAndFooter;

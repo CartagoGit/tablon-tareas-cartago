@@ -71,7 +71,7 @@ export class ModalService {
    */
   private _defaultOptions: IModalOptions = {
     class: 'modal',
-    title: { text: 'Modal Title', class: 'modal__title' },
+    title: { text: 'Modal Title', class: 'modal__title', show: false },
     backdrop: { class: 'modal__backdrop', closeOnClick: true },
     header: {
       justify: 'end',
