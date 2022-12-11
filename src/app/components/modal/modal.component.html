@@ -2,7 +2,7 @@
   <section
     #modalBackdrop
     [ngClass]="display.state === 'open' ? 'modal--open' : 'modal--close'"
-    (click)="clickBackdrop('backdrop')"
+    (click)="options?.backdrop?.closeOnClick && clickBackdrop('backdrop')"
     [class]="options?.backdrop?.class || ''"
   >
     <div
