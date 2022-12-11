@@ -1,4 +1,24 @@
 $padding-distance: 16px;
+$colors: (
+  save: green,
+  cancel: red,
+  close: rgba(255, 78, 78, 1),
+  ok: black,
+  modify: blue,
+  create: blueviolet,
+);
+
+@mixin buttons() {
+  @each $type, $color in $colors {
+    &--#{$type} {
+      background: linear-gradient(
+        212deg,
+        rgba(0, 0, 0, 0.9023984593837535) 0%,
+        $color 100%
+      );
+    }
+  }
+}
 
 h2 {
   all: unset;
@@ -67,9 +87,10 @@ h2 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: whitesmoke;
+  background: rgb(236, 236, 236);
+  // border: 1px solid black;
   border-radius: 10px;
-  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 
   &--open {
@@ -118,35 +139,20 @@ h2 {
     cursor: pointer;
     padding: 5px 10px;
     margin: 5px 10px;
-    border: black solid 1px;
+    // border: grey solid 1px;
     background-color: grey;
     transition: ease all 300ms;
     border-radius: 10px;
+    box-shadow: 0px 0px 4px 1px grey;
     color: white;
     &:hover {
       color: black;
-      // border: white 1px solid;
-      background-color: inherit;
-      // filter: brightness(0.8);
+      background: inherit;
     }
-    &--save {
-      background-color: green;
-    }
-    &--close,
-    &--cancel {
-      background-color: crimson;
+    &:disabled {
+      opacity: 0.5;
     }
 
-    &--modify {
-      background-color: blue;
-    }
-
-    &--create {
-      background-color: blueviolet;
-    }
-
-    &--ok {
-      background-color: black;
-    }
+    @include buttons();
   }
 }

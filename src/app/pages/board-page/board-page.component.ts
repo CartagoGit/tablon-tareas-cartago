@@ -32,11 +32,13 @@ export class BoardPageComponent implements OnInit {
       data: 'jouoju',
       options: {
         header: {
+          justify: 'center',
           show: true,
           buttons: {
             cerrar: {
               text: 'cerralo',
               action: () => this._modalSvc.close('cerrao'),
+              class: 'modal__button modal__button--ok',
             },
           },
         },
