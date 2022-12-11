@@ -94,8 +94,8 @@ export class ModalService {
       direction: 'column',
       class: 'modal__footer',
       buttons: {
-        close: this.defaultButtons.close,
-        guardar: this.defaultButtons.save,
+        cancelar: this.defaultButtons.cancel!,
+        guardar: this.defaultButtons.save!,
       },
     },
   };
@@ -165,7 +165,7 @@ export class ModalService {
    * NOTE - El modal creara en el componente una variable "dataRecived" con los datos pasados al modal
    * NOTE - A su vez devolvera al cerrar el modal la variable 'dataToSend' del componente
    * NOTE - En caso de no tener devolvera undefined
-  */
+   */
 
   constructor() {}
 

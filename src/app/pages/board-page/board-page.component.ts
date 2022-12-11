@@ -64,6 +64,10 @@ export class BoardPageComponent implements OnInit {
       },
     });
   }
+
+  /**
+   * ? Crea Modal para crear una nueva Sección
+   */
   public openSection() {
     this._modalSvc.open({
       component: CreateSectionPageComponent,
@@ -77,7 +81,11 @@ export class BoardPageComponent implements OnInit {
         footer: {
           show: true,
           buttons: {
-            cerrado: { action: () => console.log('po mira'), text: 'Po toma' },
+            cerrado: {
+              action: () => console.log('po mira'),
+              text: 'Po toma',
+              class: 'modal__button modal__button--cancel',
+            },
           },
         },
       },
