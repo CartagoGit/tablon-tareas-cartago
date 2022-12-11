@@ -27,7 +27,7 @@ export class ModalService {
   /**
    * ? Botones predefinidos del modal
    */
-  public defaultButtons: TModalButtonsDefault = {
+  public readonly defaultButtons: TModalButtonsDefault = {
     close: {
       class: 'modal__button modal__button--close',
       text: 'Cerrar',
@@ -69,7 +69,7 @@ export class ModalService {
   /**
    * ? Opciones default del modal si no se sobreescriben al crear el modal con otras opciones
    */
-  private _defaultOptions: IModalOptions = {
+  public readonly defaultOptions: IModalOptions = {
     class: 'modal',
     title: { text: 'Modal Title', class: 'modal__title', show: false },
     backdrop: { class: 'modal__backdrop', closeOnClick: true },
@@ -79,6 +79,7 @@ export class ModalService {
       buttons: {
         close: {
           ...this.defaultButtons.close!,
+          class: 'modal__button modal__button--close modal__button--x',
           text: 'X',
         },
       },
@@ -106,7 +107,7 @@ export class ModalService {
   private _defaultModalData: IModalData = {
     component: undefined,
     text: 'Default text Modal',
-    options: this._defaultOptions,
+    options: this.defaultOptions,
     data: undefined,
     state: 'close',
   };
@@ -213,7 +214,7 @@ export class ModalService {
   private _getMixedOptions(
     injectedOptions: IModalOptions | undefined
   ): IModalOptions | undefined {
-    if (!injectedOptions) return this._defaultOptions;
+    if (!injectedOptions) return this.defaultOptions;
     const {
       backdrop = undefined,
       body = undefined,
@@ -224,13 +225,13 @@ export class ModalService {
       title = undefined,
     } = injectedOptions;
     const newOptions: IModalOptions = {
-      style: style || this._defaultOptions.style,
-      class: className || this._defaultOptions.class,
-      backdrop: { ...this._defaultOptions.backdrop, ...backdrop },
-      body: { ...this._defaultOptions.body, ...body },
-      footer: { ...this._defaultOptions.footer!, ...footer },
-      header: { ...this._defaultOptions.header!, ...header },
-      title: { ...this._defaultOptions.title!, ...title },
+      style: style || this.defaultOptions.style,
+      class: className || this.defaultOptions.class,
+      backdrop: { ...this.defaultOptions.backdrop, ...backdrop },
+      body: { ...this.defaultOptions.body, ...body },
+      footer: { ...this.defaultOptions.footer!, ...footer },
+      header: { ...this.defaultOptions.header!, ...header },
+      title: { ...this.defaultOptions.title!, ...title },
     };
     return newOptions;
   }

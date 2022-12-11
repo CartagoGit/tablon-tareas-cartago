@@ -29,9 +29,8 @@
             [style]="button.style"
             type="button"
             (click)="button.action()"
-          >
-            {{ button.text }}
-          </div>
+            [innerHTML]="button.text"
+          ></div>
         </div>
 
         <h2
@@ -39,16 +38,19 @@
           *ngIf="options?.title?.show"
           [ngClass]="options?.title?.class"
           [style]="options?.title?.style"
-        >
-          {{ display.options?.title?.text }}
-        </h2>
+          [innerHTML]="display.options?.title?.text"
+        ></h2>
       </div>
       <div
         #modalBody
         [ngClass]="options?.body?.class"
         [style]="options?.body?.style"
       >
-        <div #contentString *ngIf="display.text">{{ display.text }}</div>
+        <div
+          #contentString
+          *ngIf="display.text"
+          [innerHTML]="display.text"
+        ></div>
         <ng-template #contentComponent></ng-template>
       </div>
 
@@ -66,9 +68,8 @@
             [style]="button.style"
             type="button"
             (click)="button.action()"
-          >
-            {{ button.text }}
-          </div>
+            [innerHTML]="button.text"
+          ></div>
         </div>
       </div>
     </div>

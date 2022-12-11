@@ -71,7 +71,41 @@ export class BoardPageComponent implements OnInit {
   public openSection() {
     this._modalSvc.open({
       component: CreateSectionPageComponent,
-      options: { footer: { show: true } },
+      options: {
+        title: {
+          show: true,
+          text: 'Nueva Sección',
+          style: `
+          font-weight: bold;
+          position: absolute;
+          display:flex;
+          justify-content: center;
+          width: 100%;
+          left: 0`,
+        },
+        header: {
+          direction: 'row',
+          show: true,
+          style:
+            'justify-content: end; align-items: center; position: relative;',
+        },
+        footer: {
+          show: true,
+          buttons: {
+            crear: {
+              action: () => this._modalSvc.create(),
+              text: 'Crear Sección',
+              position: 2,
+              class: 'modal__button modal__button--create',
+            },
+            cancelar: {
+              ...this._modalSvc.defaultButtons.cancel!,
+              position: 1,
+            },
+          },
+        },
+      },
+      data: 'Envio este textooooo',
     });
   }
   public openTech() {

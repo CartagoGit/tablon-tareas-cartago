@@ -7,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateSectionPageComponent implements OnInit {
 
+  /**
+   * ? Datos recibido y a enviar al crear/cerrar el modal que crea el componente
+   */
+  public dataRecived: any;
+  public dataToSend : any;
+
   constructor() { }
 
   ngOnInit(): void {
