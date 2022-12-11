@@ -1,5 +1,15 @@
 .form {
   display: grid;
+  &__group {
+    display: flex;
+    flex-direction: column;
+    &:focus-within {
+      .form__label {
+        color: black;
+      }
+    }
+  }
+
   &__label {
     font-size: 15px;
     font-weight: 400;
@@ -14,7 +24,10 @@
     padding: 5px;
 
     &:focus {
-      background-color: rgb(228, 228, 228);
+      & + .form__label {
+        color: black;
+      }
+      background-color: rgb(218, 218, 218);
       border: 1px solid black;
     }
   }
