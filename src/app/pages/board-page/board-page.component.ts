@@ -68,7 +68,7 @@ export class BoardPageComponent implements OnInit {
   /**
    * ? Crea Modal para crear una nueva Sección
    */
-  public openSection() {
+  public openSection(data: any = undefined) {
     this._modalSvc.open({
       component: CreateSectionPageComponent,
       options: {
@@ -105,7 +105,7 @@ export class BoardPageComponent implements OnInit {
           },
         },
       },
-      data: 'Envio este textooooo',
+      data,
     });
   }
   public openTech() {

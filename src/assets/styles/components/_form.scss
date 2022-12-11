@@ -1,0 +1,21 @@
+.form {
+  display: grid;
+  &__label {
+    font-size: 15px;
+    font-weight: 400;
+    color: grey;
+  }
+
+  &__input {
+    all: unset;
+    border-radius: 5px;
+    border: 1px solid grey;
+    transition: 300ms all ease;
+    padding: 5px;
+
+    &:focus {
+      background-color: rgb(228, 228, 228);
+      border: 1px solid black;
+    }
+  }
+}
