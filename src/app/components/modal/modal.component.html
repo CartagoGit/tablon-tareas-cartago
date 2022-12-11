@@ -4,7 +4,11 @@
     [ngClass]="display.state === 'open' ? 'modal--open' : 'modal--close'"
     (click)="options?.backdrop?.closeOnClick && clickBackdrop('backdrop')"
     [class]="options?.backdrop?.class || ''"
+    (transitionend)="
+      $event.propertyName === 'visibility' && transitionModalEnd()
+    "
   >
+    <!-- (transitionend)="log($event.propertyName)" -->
     <div
       #modal
       (click)="$event.stopPropagation()"

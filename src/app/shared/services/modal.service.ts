@@ -190,6 +190,7 @@ export class ModalService {
           this._displayClosed.next({ data: modalData.data, typeClose: 'algo' });
         },
         complete: () => {
+          // this._componentRef?.destroy();
           this._componentRef = undefined;
         },
       });

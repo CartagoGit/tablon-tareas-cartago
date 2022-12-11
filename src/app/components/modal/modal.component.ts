@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { IModalOptions } from '../../shared/structures/interfaces/modal.interfaces';
 import {
@@ -33,6 +39,12 @@ export class ModalComponent implements OnInit {
   public footerClass: string = '';
 
   /**
+   * ? Listener cuando el modal termine la transicion del css
+   */
+  @ViewChild('modalBackdrop')
+  private _modalBackdrop!: ElementRef<HTMLDivElement>;
+
+  /**
    * ? Div donde insertar el componente
    */
   @ViewChild('contentComponent', { read: ViewContainerRef })
@@ -50,7 +62,7 @@ export class ModalComponent implements OnInit {
   constructor(private _modalSvc: ModalService) {}
 
   ngOnInit(): void {
-    // ? Subscripción para recuperar los datos recibidos al abrir el modal
+    // * Subscripción para recuperar los datos recibidos al abrir el modal
     this._modalSvc.watch().subscribe({
       next: (modalData: IModalData) => {
         //* Asignamos las variables
@@ -84,7 +96,16 @@ export class ModalComponent implements OnInit {
     this.headerButtonsClass = '';
     this.footerButtonsClass = '';
     this.contentComponent.clear();
-    this._modalSvc.componentRef = undefined;
+    this._modalSvc.componentRef?.destroy();
+  }
+
+  /**
+   * ? Activa el metodo cuando la transicion del modal termina
+   */
+  public transitionModalEnd(): void {
+    if (this._modalBackdrop.nativeElement.classList.contains('modal--close')) {
+      this._cleanContent();
+    }
   }
 
   /**
