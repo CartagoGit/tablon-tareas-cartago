@@ -34,7 +34,12 @@ export class BoardPageComponent implements OnInit {
     const modalRef = this._modalService.open({
       component: CreateTechPageComponent,
       options: {
-        footer: { show: true },
+        footer: {
+          show: true,
+          buttons: {
+            cerrado: { action: () => console.log('po mira'), text: 'Po toma' },
+          },
+        },
       },
     });
     modalRef.afterClosed.subscribe({

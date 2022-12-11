@@ -3,12 +3,24 @@
     #modalBackdrop
     [ngClass]="display.state === 'open' ? 'modal--open' : 'modal--close'"
     (click)="clickBackdrop('backdrop')"
+    [class]="options?.backdrop?.class || ''"
   >
-    <div #modal (click)="$event.stopPropagation()">
-      <div #modalHeader *ngIf="display.options?.header?.show">
-        <div #modalHeaderButtons>
+    <div
+      #modal
+      (click)="$event.stopPropagation()"
+      [ngClass]="options?.class"
+      [style]="options?.style"
+    >
+      <div
+        #modalHeader
+        *ngIf="options?.header?.show"
+        [ngClass]="headerClass"
+        [style]="options?.header?.style"
+      >
+        <div #modalHeaderButtons [class]="headerButtonsClass">
           <div
             *ngFor="let button of buttonsGroup.header"
+            class="pointer"
             [class]="button.class"
             [style]="button.style"
             type="button"
@@ -18,20 +30,35 @@
           </div>
         </div>
 
-        <h2 #modalTitle *ngIf="display.options?.title?.text">
+        <h2
+          #modalTitle
+          *ngIf="options?.title?.text"
+          [ngClass]="options?.title?.class"
+          [style]="options?.title?.style"
+        >
           {{ display.options?.title?.text }}
         </h2>
       </div>
-      <div #modalBody>
+      <div
+        #modalBody
+        [ngClass]="options?.body?.class"
+        [style]="options?.body?.style"
+      >
         <div #contentString *ngIf="display.text">{{ display.text }}</div>
         <ng-template #contentComponent></ng-template>
       </div>
 
-      <div #modalFooter *ngIf="display.options?.footer?.show">
-        <div #modalFooterButtons>
+      <div
+        #modalFooter
+        *ngIf="options?.footer?.show"
+        [ngClass]="footerClass"
+        [style]="options?.footer?.style"
+      >
+        <div #modalFooterButtons [class]="footerButtonsClass">
           <div
             *ngFor="let button of buttonsGroup.footer"
-            [class]="button.class"
+            class="pointer"
+            [ngClass]="button.class"
             [style]="button.style"
             type="button"
             (click)="button.action()"
@@ -39,41 +66,6 @@
             {{ button.text }}
           </div>
         </div>
-        <!-- <div
-          type="button"
-          (click)="clickType('save')"
-          class="modal__button modal__button--save"
-        >
-          Guardar
-        </div>
-        <div
-          type="button"
-          (click)="clickType('ok')"
-          class="modal__button modal__button--ok"
-        >
-          Ok
-        </div>
-        <div
-          type="button"
-          (click)="clickType('close')"
-          class="modal__button modal__button--close"
-        >
-          Cerrar
-        </div>
-        <div
-          type="button"
-          (click)="clickType('modify')"
-          class="modal__button modal__button--modify"
-        >
-          Modificar
-        </div>
-        <div
-          type="button"
-          (click)="clickType('cancel')"
-          class="modal__button modal__button--cancel"
-        >
-          Cancelar
-        </div> -->
       </div>
     </div>
   </section>

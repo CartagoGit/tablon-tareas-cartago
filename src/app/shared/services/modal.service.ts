@@ -79,12 +79,9 @@ export class ModalService {
         close: {
           ...this._defaultButtons.close!,
           text: 'X',
-          position: 30,
-          // action: () => console.log('prueba'),
         },
       },
       show: true,
-      // style: 'background: purple; color: blue;',
       class: 'modal__header',
     },
     body: {
@@ -199,17 +196,46 @@ export class ModalService {
   }
 
   /**
+   * ? Devuelve las opciones mixeadas entre las recibidas y las default
+   */
+  private _getMixedOptions(
+    injectedOptions: IModalOptions | undefined
+  ): IModalOptions | undefined {
+    if (!injectedOptions) return this._defaultOptions;
+    const {
+      backdrop = undefined,
+      body = undefined,
+      class: className = undefined,
+      footer = undefined,
+      header = undefined,
+      style = undefined,
+      title = undefined,
+    } = injectedOptions;
+    const newOptions: IModalOptions = {
+      style: style || this._defaultOptions.style,
+      class: className || this._defaultOptions.class,
+      backdrop: { ...this._defaultOptions.backdrop, ...backdrop },
+      body: { ...this._defaultOptions.body, ...body },
+      footer: { ...this._defaultOptions.footer!, ...footer },
+      header: { ...this._defaultOptions.header!, ...header },
+      title: { ...this._defaultOptions.title!, ...title },
+    };
+    return newOptions;
+  }
+
+  /**
    * ? Abre el modal y recibe los datos para configurar la ventana
    * @params {IModalData} - Datos a recibir al abrir el modal
-   * @return {IModalRef} - Datos y metodos de referencia del modal
+   * @return {IModalRef}  Datos y metodos de referencia del modal
    */
   public open(modalData: IModalData | undefined = undefined): IModalRef {
     // * Sobreponemos los datos al abrir el modal sobre los datos por default
-    console.log(modalData);
-    this._modalData = { ...this._defaultModalData };
+
+    const newOptions = this._getMixedOptions(modalData?.options);
     this._modalData = {
       ...this._defaultModalData,
       ...modalData,
+      options: { ...newOptions },
       text: modalData?.component ? undefined : modalData?.text,
       state: 'open',
     };
