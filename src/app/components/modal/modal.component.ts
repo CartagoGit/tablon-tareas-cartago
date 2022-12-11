@@ -1,22 +1,10 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { IModalOptions } from '../../shared/structures/interfaces/modal.interfaces';
 import {
-  TPositionDirection,
-  TPositions,
-} from '../../shared/structures/interfaces/position.interfaces';
-import {
   IModalData,
-  TModalButtonDefault,
   TModalButtonOptions,
 } from 'src/app/shared/structures/interfaces/modal.interfaces';
-import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-modal',
@@ -43,20 +31,6 @@ export class ModalComponent implements OnInit {
   public footerButtonsClass: string = '';
   public headerClass: string = '';
   public footerClass: string = '';
-
-  /**!
-   * ? ElementRef de Cabecera, Body y Footer del modal
-   */
-  // @ViewChild('modal') modal!: ElementRef<HTMLDivElement>;
-  // @ViewChild('modalTitle') modalTitle!: ElementRef<HTMLDivElement>;
-  // @ViewChild('modalBackdrop') modalBackdrop!: ElementRef<HTMLDivElement>;
-  // @ViewChild('modalHeader') modalHeader!: ElementRef<HTMLDivElement>;
-  // @ViewChild('modalHeaderButtons')
-  // modalHeaderButtons!: ElementRef<HTMLDivElement>;
-  @ViewChild('modalBody') modalBody!: ElementRef<HTMLDivElement>;
-  // @ViewChild('modalFooter') modalFooter!: ElementRef<HTMLDivElement>;
-  // @ViewChild('modalFooterButtons')
-  // modalFooterButtons!: ElementRef<HTMLDivElement>;
 
   /**
    * ? Div donde insertar el componente
@@ -109,7 +83,7 @@ export class ModalComponent implements OnInit {
     this.footerClass = '';
     this.headerButtonsClass = '';
     this.footerButtonsClass = '';
-    this.modalBody && this.contentComponent.clear();
+    this.contentComponent.clear();
     this._modalSvc.componentRef = undefined;
   }
 
